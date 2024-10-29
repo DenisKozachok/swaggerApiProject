@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.11.2'
+    id 'io.freefair.lombok' version '8.3'
+}
+
+group 'io.swagger'
+version '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    allureVersion = '2.29.0'
+    junitVersion = '5.10.0'
+    jacksonVersion = '2.15.2'
+    aspectjVersion = '1.9.19'
+    ownerVersion = '1.0.12'
+    slf4jVersion = '2.0.9'
+    restAssuredVersion = '5.3.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.register('generateAllureReport') {
+    dependsOn 'test'
+    doLast {
+        exec {
+            commandLine 'allure', 'generate', 'build/allure-results', '-o', 'build/allure-report', '--clean'
+        }
+    }
+}
+
+dependencies {
+    implementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "io.qameta.allure:allure-rest-assured:${allureVersion}"
+    implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
+    implementation "org.aeonbits.owner:owner:${ownerVersion}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}" // Добавлено
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+allure {
+    autoconfigure = true
+    version = allureVersion
+
+    useJUnit5 {
+        version = allureVersion
+    }
+}
