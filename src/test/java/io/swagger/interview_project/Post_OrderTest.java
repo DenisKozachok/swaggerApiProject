@@ -43,8 +43,8 @@ public class Post_OrderTest {
     }
 
     @Test
-    @DisplayName("User should be able to place an order")
-    public void should_user_place_orderTest_Alternative_approache() {
+    @DisplayName("User should be able to place an order alternative assert")
+    public void should_user_place_orderTest_Alternative_assert() {
         var order = new Order()
                 .setPetId(0)
                 .setQuantity(0)
