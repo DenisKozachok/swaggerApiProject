@@ -13,19 +13,19 @@ import lombok.experimental.Accessors;
 public class Order{
 
 	@JsonProperty("petId")
-	private int petId;
+	private Integer petId;
 
 	@JsonProperty("quantity")
-	private int quantity;
+	private Integer quantity;
 
 	@JsonProperty("id")
-	private int id;
+	private Integer id;
 
 	@JsonProperty("shipDate")
 	private String shipDate;
 
 	@JsonProperty("complete")
-	private boolean complete;
+	private Boolean complete;
 
 	@JsonProperty("status")
 	private String status;
