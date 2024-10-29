@@ -7,14 +7,14 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import lombok.Getter;
 
+import static io.swagger.interview_project.api.configs.ConfigManager.appConfig;
+
 @Getter
 public class ApiService {
 
-    private String MAIN_URL = "https://petstore.swagger.io/v2";
-
     protected RequestSpecification baseGiven() {
         return RestAssured.given()
-                .baseUri(MAIN_URL)
+                .baseUri(appConfig().baseUrl())
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .filters(new RequestLoggingFilter(),
