@@ -7,9 +7,12 @@ Running Tests with Gradle, JUnit 5, Java 17, and Generating Allure Report
 Requirements
 
 - Java 17
+- JUnit 5
 - Gradle (recommended version 6.8 or higher)
 - Allure (recommended version 2.13.8 or higher)
-- JUnit 5
+- Lombok (recommended version 1.18.22 or higher)
+- 
+
  
 ## Steps to Run Tests and Generate Report
 
@@ -39,7 +42,7 @@ To open the report in a browser, run the command:
 ```
 The report will then be available at http://localhost:[port].
 
-![img.png](img.png)
+![img_2.png](img_2.png)
 ![img_1.png](img_1.png)
 Useful Commands
 
