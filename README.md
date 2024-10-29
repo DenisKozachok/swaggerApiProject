@@ -39,6 +39,8 @@ To open the report in a browser, run the command:
 ```
 The report will then be available at http://localhost:[port].
 
+![img.png](img.png)
+![img_1.png](img_1.png)
 Useful Commands
 
 ```bash
