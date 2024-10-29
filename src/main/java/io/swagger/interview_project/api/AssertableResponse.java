@@ -20,4 +20,16 @@ public class AssertableResponse {
         condition.check(response);
         return this;
     }
+
+    @Step("Api response shouldHave {condition}")
+    public AssertableResponse shouldHave(Condition... condition) {
+        for (Condition cond : condition) {
+            cond.check(response);
+        }
+        return this;
+    }
+
+    public <T> T responseAs(Class<T> tClass) {
+        return response.as(tClass);
+    }
 }

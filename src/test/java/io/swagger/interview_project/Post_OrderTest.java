@@ -14,6 +14,7 @@ import static io.swagger.interview_project.api.conditions.Conditions.bodyField;
 import static io.swagger.interview_project.api.conditions.Conditions.statusCode;
 import static io.swagger.interview_project.api.models.storeController.post_orderModel.OrderStatusEnum.PLACED;
 import static io.swagger.interview_project.api.utils.TimeGenerator.generateCurrentTime;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Post_OrderTest {
 
@@ -39,6 +40,30 @@ public class Post_OrderTest {
                         bodyField("id", Matchers.notNullValue()),
                         bodyField("quantity", Matchers.equalTo(order.getQuantity())),
                         bodyField("petId", Matchers.equalTo(order.getPetId())));
+    }
+
+    @Test
+    @DisplayName("User should be able to place an order")
+    public void should_user_place_orderTest_Alternative_approache() {
+        var order = new Order()
+                .setPetId(0)
+                .setQuantity(0)
+                .setId(1)
+                .setShipDate(generateCurrentTime())
+                .setComplete(true)
+                .setStatus(PLACED.getStatus());
+
+        var actualOrder = storeService.placeOrder(order)
+                .shouldHave(statusCode(200)).responseAs(Order.class);
+
+        assertEquals(order.getId(), actualOrder.getId());
+        assertEquals(order.getPetId(), actualOrder.getPetId());
+        assertEquals(order.getQuantity(), actualOrder.getQuantity());
+        assertEquals(order.getShipDate(), actualOrder.getShipDate());
+        assertEquals(order.getComplete(), actualOrder.getComplete());
+        assertEquals(order.getStatus(), actualOrder.getStatus());
+
+
     }
 
     @EnumSource(OrderStatusEnum.class)
@@ -88,6 +113,70 @@ public class Post_OrderTest {
                 .shouldHave(statusCode(200),
                         bodyField("complete", Matchers.equalTo(order.getComplete())));
 
+    }
+
+    //NEGATIVE TESTS
+    @Test
+    @DisplayName("Order creation should fail when required fields are missing")
+    public void should_fail_when_required_fields_missing() {
+        var order = new Order()
+                .setShipDate(generateCurrentTime());
+
+        storeService.placeOrder(order)
+                .shouldHave(statusCode(400));
+    }
+
+
+    @Test
+    @DisplayName("Order creation should fail with negative quantity")
+    public void should_fail_with_negative_quantity() {
+        var order = new Order()
+                .setPetId(0)
+                .setQuantity(-1)
+                .setId(0)
+                .setShipDate(generateCurrentTime())
+                .setComplete(true)
+                .setStatus(PLACED.getStatus());
+
+        storeService.placeOrder(order)
+                .shouldHave(statusCode(400));
+    }
+
+    @Test
+    @DisplayName("Order creation should fail with invalid shipDate format")
+    public void should_fail_with_invalid_shipDate_format() {
+        var order = new Order()
+                .setPetId(0)
+                .setQuantity(0)
+                .setId(0)
+                .setShipDate("2024-10-28")
+                .setComplete(true)
+                .setStatus(PLACED.getStatus());
+
+        storeService.placeOrder(order)
+                .shouldHave(statusCode(400));
+    }
+
+    @Test
+    @DisplayName("Order creation should fail with invalid status")
+    public void should_fail_with_invalid_status() {
+        var order = new Order()
+                .setPetId(0)
+                .setQuantity(0)
+                .setId(0)
+                .setShipDate(generateCurrentTime())
+                .setComplete(true)
+                .setStatus("in_transit");
+
+        storeService.placeOrder(order)
+                .shouldHave(statusCode(400));
+    }
+
+    @Test
+    @DisplayName("Order creation should fail with empty request body")
+    public void should_fail_with_empty_request_body() {
+        storeService.placeOrder(new Order())
+                .shouldHave(statusCode(400));
     }
 
 }
