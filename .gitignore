@@ -1,0 +1,14 @@
+### Build Files ###
+bin/
+target/
+build/
+.gradle/
+.allure/
+allure-results/
+allure-report/
+
+### IntelliJ IDEA ###
+*.iml
+*.ipr
+*.iws
+*.idea
